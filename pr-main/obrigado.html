@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obrigado!</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #FFDDE1, #FFF6F0);
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #ffffffcc;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      animation: fadeIn 1s ease-out;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #FF6F91;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .btn-home {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #FF6F91;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: background 0.3s;
+    }
+
+    .btn-home:hover {
+      background-color: #FF4C68;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    @media(max-width: 480px){
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Obrigado!</h1>
+    <p>
+      Recebemos sua solicitação com carinho. 💖<br>
+      Em breve entraremos em contato para confirmar os detalhes.
+    </p>
+    <a href="#" class="btn-home" onclick="window.location.replace('https://madson10.github.io/pr/'); return false;">Voltar para o início</a>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Chá de Casa Nova</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background: #f9f9f9;
+      padding: 8px;
+      margin: 5px 0;
+      border-left: 5px solid #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chá de Casa Nova 🎁</h1>
+
+  <!-- Formulário para envio com FormSubmit -->
+  <form id="form" action="https://formsubmit.co/madsonsdj@hotmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Novo presente confirmado!">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+
+    <label for="nome">Seu nome:</label>
+    <input type="text" id="nome" name="Nome" placeholder="Digite seu nome" required>
+
+    <label for="contato">Contato (e-mail ou telefone):</label>
+    <input type="text" id="contato" name="Contato" placeholder="Digite seu contato" required>
+
+    <label for="presente">Escolha um presente:</label>
+    <select id="presente" name="Presente" required>
+      <option disabled selected value="">-- Selecione --</option>
+      <option>Jogo de pratos</option>
+      <option>Panela de pressão</option>
+      <option>Conjunto de copos</option>
+      <option>Assadeira</option>
+      <option>Toalha de mesa</option>
+      <option>Tapete</option>
+      <option>Liquidificador</option>
+      <option>Espremedor de frutas</option>
+    </select>
+
+    <button type="submit">Confirmar Presente</button>
+  </form>
+
+  <h2>Presentes Confirmados 🎉</h2>
+  <ul id="listaConfirmados"></ul>
+
+  <script>
+    const form = document.getElementById('form');
+    const select = document.getElementById('presente');
+    const lista = document.getElementById('listaConfirmados');
+
+    form.addEventListener('submit', function(event) {
+      const nome = document.getElementById('nome').value.trim();
+      const contato = document.getElementById('contato').value.trim();
+      const presente = select.value;
+
+      if (!nome || !contato || !presente) {
+        alert("Preencha todos os campos!");
+        event.preventDefault();
+        return;
+      }
+
+      // Adiciona confirmação na tela
+      const li = document.createElement('li');
+      li.textContent = `${nome} (${contato}) vai trazer: ${presente}`;
+      lista.appendChild(li);
+
+      // Remove o presente da lista
+      select.remove(select.selectedIndex);
+      select.value = "";
+
+      // Limpa campos após envio (após pequeno delay)
+      setTimeout(() => {
+        document.getElementById('nome').value = '';
+        document.getElementById('contato').value = '';
+      }, 500);
+    });
+  </script>
+</body>
+</html>

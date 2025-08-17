@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lista de Presentes 🎁</title>
+<!--<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #444;
+  }
+  input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  button {
+    background: #28a745;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #218838;
+  }
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: none;
+  }
+</style>-->
+ <style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #444;
+  }
+
+  input, select, button {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  button {
+    background: #28a745;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #218838;
+  }
+
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: none;
+  }
+</style>
+
+
+</head>
+<body>
+  <div class="container">
+    <h2>Escolha seu presente 🎁</h2>
+    <form id="formPresente">
+      <label for="nome">Seu Nome</label>
+      <input type="text" id="nome" name="Nome" required placeholder="Digite seu nome" />
+
+      <label for="whats">WhatsApp</label>
+      <input
+        type="tel"
+        id="whats"
+        name="WhatsApp"
+        required
+        placeholder="11987654321"
+        pattern="[0-9]{11}"
+      />
+      <div id="erroWhats" class="error">
+        Digite um WhatsApp válido (11 dígitos, ex: 11987654321)
+      </div>
+
+      <label for="presente">Escolha um presente</label>
+      <select id="presente" name="Presente" required>
+        <option value="">Carregando...</option>
+      </select>
+
+      <button type="submit">Confirmar Presente 🎉</button>
+    </form>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://vmlzfymhhkaqzpqttoto.supabase.co";
+    const SUPABASE_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtbHpmeW1oaGthcXpwcXR0b3RvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzOTM5NTEsImV4cCI6MjA3MDk2OTk1MX0.dBNTqmZ3ix9Ndx3qmyDo6W5AiRE4LQg7oPgEx1-2bh8";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const selectPresente = document.getElementById("presente");
+    const erroWhats = document.getElementById("erroWhats");
+
+    // Carrega produtos disponíveis
+    async function carregarPresentes() {
+      /*const { data, error } = await supabaseClient
+        .from("produtos")
+        .select("*")
+        .eq("disponivel", true);*/
+      const { data, error } = await supabaseClient
+  .from("produtos")
+  .select("*")
+  .eq("disponivel", true)
+  .order("id", { ascending: true });
+
+
+      if (error) {
+        console.error("Erro ao carregar presentes:", error);
+        selectPresente.innerHTML = '<option value="">Erro ao carregar</option>';
+        return;
+      }
+
+      selectPresente.innerHTML = '<option value="">Selecione...</option>';
+      data.forEach((p) => {
+        const option = document.createElement("option");
+        option.value = p.id;
+        option.textContent = p.nome;
+        selectPresente.appendChild(option);
+      });
+    }
+
+    carregarPresentes();
+
+    // Chama a função proxy para reservar o presente
+    async function reservarPresente(id, nome, telefone) {
+      const res = await fetch(
+        "https://vmlzfymhhkaqzpqttoto.supabase.co/functions/v1/reservar_presente",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, nome, telefone }),
+        }
+      );
+      const data = await res.json();
+      if (!data.success)
+        throw new Error(data.error || "Erro ao reservar o presente");
+    }
+
+    // Validação e envio
+    document.getElementById("formPresente").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value.trim();
+      const telefone = document.getElementById("whats").value.trim();
+      const id = document.getElementById("presente").value;
+
+      if (!/^[0-9]{11}$/.test(telefone)) {
+        erroWhats.style.display = "block";
+        return;
+      } else {
+        erroWhats.style.display = "none";
+      }
+
+      try {
+        await reservarPresente(id, nome, telefone);
+
+        // Envia também para FormSubmit
+        /*fetch("https://formsubmit.co/madsonsdj@hotmail.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ Nome: nome, WhatsApp: telefone, Presente: id }),
+        });*/
+
+        // Redireciona para página de obrigado
+        window.location.href = "obrigado.html";
+
+      } catch (err) {
+        alert("Erro ao reservar o presente: " + err.message);
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
+
